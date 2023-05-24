@@ -45,7 +45,19 @@ trait Anonimizable
             }
             $params = $config['faker']['params'] ?? null;
 
-            $anonymizedValue = call_user_func([$faker, $provider], $params);
+            if ($provider === 'database') {
+                $field = $config['faker']['params']['copyField'] ?? null;
+                if (!$field) {
+                    throw new InvalidArgumentException('The field name must specify how to anonymize the data');
+                }
+
+                $prefix = $config['faker']['params']['prefix'] ?? '';
+
+                $anonymizedValue = $prefix. $this[$field];
+            } else {
+                $anonymizedValue = call_user_func([$faker, $provider], $params);
+            }
+
 
             $this[$columnName] = $anonymizedValue;
         }

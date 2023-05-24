@@ -27,12 +27,6 @@ class AnonimizeCommand extends Command
 
     private readonly float $startTime;
 
-    public function __construct()
-    {
-        $this->startTime = microtime(true);
-        parent::__construct();
-    }
-
     /**
      * The console components factory.
      *
@@ -244,13 +238,4 @@ class AnonimizeCommand extends Command
         return new $name();
     }
 
-    public function __destruct()
-    {
-        if (!$this->option('pretend')) {
-            $durationgIsSeconds = round(microtime(true) - $this->startTime, 1);
-            $this->components->twoColumnDetail("Duration of anonymization", "{$durationgIsSeconds} seconds");
-        }
-
-        parent::__destruct();
-    }
 }
