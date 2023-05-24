@@ -46,7 +46,34 @@ and specify how they shoul be anonymized
         'email' => [
             'faker' => ['provider' => 'safeEmail'],
         ],
+        'middle_name' => [
+            'faker' => ['provider' => 'randomElement', 'params' => ['', '','', '', 'van','van der']],
+        ],        
     ];
+```
+
+## Copy data from another field to anonymize
+* set provider to `database`
+* specify the field to copy from
+* optionally set the prefix that will be used in the anonymized data
+
+```
+        'first_name' => [
+            'faker' => ['provider' => 'database',
+                'params' => [
+                    'prefix' => 'user-',
+                    'copyField' => 'id'
+                ]
+            ],
+        ],
+```
+
+## Password
+Password can be set, laravel will take care of the bcrypt hash storage
+```
+        'password' => [
+            'faker' => ['provider' => 'randomElement', 'params' => ['welcome']],
+        ],
 ```
 
 ### Common faker functions
@@ -54,6 +81,13 @@ firstName
 lastName
 userName                // 'wade55'
 company
+
+lexify('Hello ???') // 'Hello wgt' useful for fixed data set
+bothify('Hello ##??') // 'Hello 42jz'
+asciify('Hello ***') // 'Hello R6+'
+randomElements($array = array ('a','b','c'), $count = 1) // array('c')
+randomElement($array = array ('a','b','c')) // 'b'
+
 
 locale        // en_UK
 countryCode   // UK
