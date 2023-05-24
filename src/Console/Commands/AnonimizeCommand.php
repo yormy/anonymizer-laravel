@@ -192,7 +192,11 @@ class AnonimizeCommand extends Command
 
     protected function pretendToAnonymize(string $model): void
     {
-        $instance = $this->getClass($model);
+        try {
+            $instance = $this->getClass($model);
+        } catch (\Throwable) {
+            return; // if the class cannot be created (ie abstract class) just skip it
+        }
 
         if (method_exists($instance, 'anonymizable')) {
             /**
@@ -206,7 +210,6 @@ class AnonimizeCommand extends Command
             $count = $instance->count();
         }
 
-        $this->components->info('The following actions will take place');
         if ($count === 0) {
             $this->components->info("No anonymized [$model] records found.");
         } else {
