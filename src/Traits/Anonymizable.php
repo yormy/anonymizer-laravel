@@ -6,9 +6,9 @@ use Faker\Factory;
 use InvalidArgumentException;
 use Yormy\AnonymizerLaravel\Events\ModelsAnonymized;
 
-trait Anonimizable
+trait Anonymizable
 {
-    public function anonimizeAll(int $chunkSize = 1000): int
+    public function anonymizeAll(int $chunkSize = 1000): int
     {
         $total = 0;
         $startTime = microtime(true);
@@ -38,7 +38,7 @@ trait Anonimizable
     {
         $faker = Factory::create(config('anonymizer.faker.locale'));
 
-        foreach ($this->anonimizable as $columnName => $config) {
+        foreach ($this->anonymizable as $columnName => $config) {
             $provider = $config['faker']['provider'] ?? null;
             if (! $provider) {
                 throw new InvalidArgumentException('The column name must specify how to anonymize the data');

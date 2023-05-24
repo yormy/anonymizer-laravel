@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
 use Yormy\AnonymizerLaravel\Events\ModelsAnonymized;
-use Yormy\AnonymizerLaravel\Traits\Anonimizable;
+use Yormy\AnonymizerLaravel\Traits\Anonymizable;
 
 /**
  * @psalm-suppress UndefinedThisPropertyFetch
  *
  */
-class AnonimizeCommand extends Command
+class AnonymizeCommand extends Command
 {
     protected $signature = 'db:anonymize
                                 {--model=* : Class names of the models to be anonymized}
@@ -127,7 +127,7 @@ class AnonimizeCommand extends Command
          * @psalm-suppress MixedMethodCall
          */
         $total = $this->isAnonymizable($model)
-            ? (int)$instance->anonimizeAll($chunkSize)
+            ? (int)$instance->anonymizeAll($chunkSize)
             : 0;
 
         if ($total === 0) {
@@ -187,7 +187,7 @@ class AnonimizeCommand extends Command
     {
         $uses = class_uses_recursive($model);
 
-        return in_array(Anonimizable::class, $uses);
+        return in_array(Anonymizable::class, $uses);
     }
 
     protected function pretendToAnonymize(string $model): void
@@ -211,7 +211,7 @@ class AnonimizeCommand extends Command
         }
 
         if ($count === 0) {
-            $this->components->info("No anonymized [$model] records found.");
+            $this->components->twoColumnDetail($model, "no action");
         } else {
             $this->components->twoColumnDetail($model, "{$count} records will be anonymized");
         }
