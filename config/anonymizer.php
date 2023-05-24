@@ -63,6 +63,9 @@ return [
                 'email' => [
                     'faker' => ['provider' => 'safeEmail'],
                 ],
+                'username' => [
+                    'faker' => ['provider' => 'safeEmail'],
+                ],
             ]
         ]
     ],
