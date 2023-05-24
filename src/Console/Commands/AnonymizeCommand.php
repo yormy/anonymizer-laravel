@@ -9,22 +9,23 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
+use Yormy\AnonymizerLaravel\Actions\AnonymizeWithoutModel;
 use Yormy\AnonymizerLaravel\Events\ModelsAnonymized;
-use Yormy\AnonymizerLaravel\Traits\Anonimizable;
+use Yormy\AnonymizerLaravel\Traits\Anonymizable;
 
 /**
  * @psalm-suppress UndefinedThisPropertyFetch
- *
  */
-class AnonimizeCommand extends Command
+class AnonymizeCommand extends Command
 {
-    protected $signature = 'db:anonymizer
+    protected $signature = 'db:anonymize
                                 {--model=* : Class names of the models to be anonymized}
                                 {--chunk=1000 : The number of models to retrieve per chunk of models to be deleted}
                                 {--pretend : Display the number of anonymized records found instead of actioning on them}';
 
     protected $description = 'Anonymize models';
 
+    private float $startTime;
 
     /**
      * The console components factory.
@@ -37,7 +38,7 @@ class AnonimizeCommand extends Command
 
     protected function configEnvironments(): array
     {
-        return (array)config('anonymizer.environments');
+        return (array) config('anonymizer.environments');
     }
 
     /**
@@ -45,8 +46,10 @@ class AnonimizeCommand extends Command
      */
     public function handle(Dispatcher $events)
     {
+        $this->startTime = microtime(true);
+
         if (! in_array(config('app.env'), $this->configEnvironments())) {
-            $this->error('It is forbidden to run anonymizer on '. (string)config('app.env').' environment');
+            $this->error('It is forbidden to run anonymizer on '.(string) config('app.env').' environment');
 
             return 0;
         }
@@ -77,13 +80,9 @@ class AnonimizeCommand extends Command
              */
             if (! in_array($event->model, $anonymizing)) {
                 $anonymizing[] = $event->model;
-
-                $this->newLine();
-
-                $this->components->info(sprintf('Anonymizing [%s] records.', $event->model));
             }
 
-            $this->components->twoColumnDetail($event->model, "{$event->count} records");
+            $this->components->twoColumnDetail($event->model, "{$event->count} records ({$event->durationInSeconds} seconds)");
         });
 
         /**
@@ -93,7 +92,12 @@ class AnonimizeCommand extends Command
 
         $this->truncateTables();
 
+        AnonymizeWithoutModel::exec();
+
         $events->forget(ModelsAnonymized::class);
+
+        $durationInMinutes = round((microtime(true) - $this->startTime) / 60, 1);
+        $this->components->twoColumnDetail('TOTAL DURATION', "{$durationInMinutes} minutes");
 
         return null;
     }
@@ -113,7 +117,11 @@ class AnonimizeCommand extends Command
 
     protected function anonymizeModel(string $model): void
     {
-        $instance = $this->getClass($model);
+        try {
+            $instance = $this->getClass($model);
+        } catch (\Throwable) {
+            return; // if the class cannot be created (ie abstract class) just skip it
+        }
 
         $chunkSize = $this->option('chunk');
 
@@ -121,11 +129,11 @@ class AnonimizeCommand extends Command
          * @psalm-suppress MixedMethodCall
          */
         $total = $this->isAnonymizable($model)
-            ? (int)$instance->anonimizeAll($chunkSize)
+            ? (int) $instance->anonymizeAll($chunkSize)
             : 0;
 
         if ($total === 0) {
-            $this->components->info("No anonymizable [$model] records found.");
+            $this->components->twoColumnDetail($model, '0 records');
         }
     }
 
@@ -174,25 +182,29 @@ class AnonimizeCommand extends Command
 
     protected function getDefaultPath(): string
     {
-        return app_path('');
+        return app_path(config('anonymizer.scan_path', ''));
     }
 
     protected function isAnonymizable(string $model): bool
     {
         $uses = class_uses_recursive($model);
 
-        return in_array(Anonimizable::class, $uses);
+        return in_array(Anonymizable::class, $uses);
     }
 
     protected function pretendToAnonymize(string $model): void
     {
-        $instance = $this->getClass($model);
+        try {
+            $instance = $this->getClass($model);
+        } catch (\Throwable) {
+            return; // if the class cannot be created (ie abstract class) just skip it
+        }
 
         if (method_exists($instance, 'anonymizable')) {
             /**
              * @psalm-suppress MixedMethodCall
              */
-            $count = (int)$instance->anonymizable()->count();
+            $count = (int) $instance->anonymizable()->count();
         } else {
             /**
              * @psalm-suppress MixedMethodCall
@@ -200,9 +212,8 @@ class AnonimizeCommand extends Command
             $count = $instance->count();
         }
 
-        $this->components->info('The following actions will take place');
         if ($count === 0) {
-            $this->components->info("No anonymized [$model] records found.");
+            $this->components->twoColumnDetail($model, 'no action');
         } else {
             $this->components->twoColumnDetail($model, "{$count} records will be anonymized");
         }
@@ -213,7 +224,7 @@ class AnonimizeCommand extends Command
         /**
          * @var string[] $truncateTables
          */
-        $truncateTables = (array)config('anonymizer.truncate');
+        $truncateTables = (array) config('anonymizer.truncate');
 
         if (empty($truncateTables)) {
             $this->components->info('No tables will be truncated');

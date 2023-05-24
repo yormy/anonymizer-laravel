@@ -3,7 +3,7 @@
 namespace Yormy\AnonymizerLaravel;
 
 use Illuminate\Support\ServiceProvider;
-use Yormy\AnonymizerLaravel\Console\Commands\AnonimizeCommand;
+use Yormy\AnonymizerLaravel\Console\Commands\AnonymizeCommand;
 use Yormy\AnonymizerLaravel\ServiceProviders\EventServiceProvider;
 
 class AnonymizerServiceProvider extends ServiceProvider
@@ -43,7 +43,7 @@ class AnonymizerServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                AnonimizeCommand::class,
+                AnonymizeCommand::class,
             ]);
         }
     }

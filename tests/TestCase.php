@@ -1,16 +1,9 @@
 <?php
 
-namespace Yormy\LaravelFootsteps\Tests;
+namespace Yormy\AnonymizerLaravel\Tests;
 
-use Orchestra\Testbench\TestCase as Orchestra;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 
-/**
- * @psalm-suppress PropertyNotSetInConstructor
- */
-class TestCase extends Orchestra
+abstract class TestCase extends BaseTestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
 }

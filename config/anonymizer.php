@@ -58,6 +58,45 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Scan path
+    |--------------------------------------------------------------------------
+    |
+    | The following path will be scanned for anonymizable models
+    | All models somewhere in that path that use the Anonymizable trait will be processed
+    |
+    */
+    'scan_path' => 'Console/Commands',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Without Model
+    |--------------------------------------------------------------------------
+    |
+    | When we have no access to the model we can still anonymize the data in the following way
+    | We need to specify the table and its primary key.
+    | then in the rest of the config it is the same settings as if it were a model
+    | however the copy from fields is not available on a 'Without Model Anonymizer
+    |
+    | 'withoutModel' => [
+    |     'customers' => [
+    |         'primaryKey' => 'id',
+    |         'fields' => [
+    |             'email' => [
+    |                 'faker' => ['provider' => 'safeEmail'],
+    |            ],
+    |             'username' => [
+    |                 'faker' => ['provider' => 'safeEmail'],
+    |             ],
+    |         ]
+    |     ]
+    | ],
+    |
+    */
+    'withoutModel' => [
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Ignore paths
     |--------------------------------------------------------------------------
     |
