@@ -11,6 +11,7 @@ trait Anonimizable
     public function anonimizeAll(int $chunkSize = 1000): int
     {
         $total = 0;
+        $startTime = microtime(true);
 
         if (method_exists($this, 'anonymizable')) {
             $item = $this->anonymizable();
@@ -18,12 +19,13 @@ trait Anonimizable
             $item = $this;
         }
 
-        $item->chunkById($chunkSize, function ($models) use (&$total) {
+        $item->chunkById($chunkSize, function ($models) use (&$total, $startTime) {
             $models->each->anonymize();
 
             $total += $models->count();
 
-            event(new ModelsAnonymized(static::class, $total));
+            $durationIsSeconds = round(microtime(true) - $startTime, 1);
+            event(new ModelsAnonymized(static::class, $total, $durationIsSeconds));
         });
 
         return $total;

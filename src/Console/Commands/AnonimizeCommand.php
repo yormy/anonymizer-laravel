@@ -52,8 +52,6 @@ class AnonimizeCommand extends Command
      */
     public function handle(Dispatcher $events)
     {
-
-
         if (! in_array(config('app.env'), $this->configEnvironments())) {
             $this->error('It is forbidden to run anonymizer on '. (string)config('app.env').' environment');
 
@@ -92,7 +90,7 @@ class AnonimizeCommand extends Command
                 $this->components->info(sprintf('Anonymizing [%s] records.', $event->model));
             }
 
-            $this->components->twoColumnDetail($event->model, "{$event->count} records");
+            $this->components->twoColumnDetail($event->model, "{$event->count} records ({$event->durationIsSeconds} seconds)");
         });
 
         /**
