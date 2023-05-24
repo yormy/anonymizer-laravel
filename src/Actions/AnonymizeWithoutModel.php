@@ -20,18 +20,22 @@ class AnonymizeWithoutModel
             $fields = $tableConfig['fields'];
             $primaryKeys = self::getPrimaryKeys($table, $primaryKeyName);
 
-            // todo, update per record multiple fields
+            $updateFields=[];
             foreach ($fields as $field => $faker) {
-                $count = 0;
-                foreach ($primaryKeys as $primaryKeyValue) {
-                    $value = AnonymizeService::get($faker);
-                    DB::statement("UPDATE $table SET $field = '$value' where $primaryKeyName=$primaryKeyValue");
-                    $count++;
-                }
-
-                $durationInSeconds = round(microtime(true) - $startTime, 0);
-                event(new ModelsAnonymized("{$table}", $count, $durationInSeconds));
+                $value = AnonymizeService::get($faker);
+                $updateFields[] = "$field = '$value'";
             }
+
+            $count = 0;
+            foreach ($primaryKeys as $primaryKeyValue) {
+                $newFieldValues = implode(',', $updateFields);
+                DB::statement("UPDATE $table SET $newFieldValues where $primaryKeyName=$primaryKeyValue");
+                $count++;
+            }
+
+            $durationInSeconds = round(microtime(true) - $startTime, 0);
+            event(new ModelsAnonymized("{$table}", $count, $durationInSeconds));
+
         }
     }
 
