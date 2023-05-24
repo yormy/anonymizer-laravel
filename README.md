@@ -14,17 +14,6 @@ Especially useful for when developers have to work with production data. In that
 composer require yormy/anonymizer-laravel
 ```
 
-#temp composer
-
-        {
-            "type": "path",
-            "url": "./packages/anonymizer-laravel"
-        }
-
-    "require": {
-        "yormy/anonymizer-laravel" : "dev-main",
-
-
 # Models
 Update the models you want to be able to anonymize
 
@@ -74,6 +63,13 @@ Password can be set, laravel will take care of the bcrypt hash storage
         'password' => [
             'faker' => ['provider' => 'randomElement', 'params' => ['welcome']],
         ],
+```
+
+
+# Dry run
+you can run the anonymizer without performing actions to give you a clue about what is going to happen.
+```
+php artisan db:anonymize --pretend
 ```
 
 ### Common faker functions
