@@ -4,7 +4,6 @@ namespace Yormy\AnonymizerLaravel\Services;
 
 use Faker\Factory;
 use InvalidArgumentException;
-use Yormy\AnonymizerLaravel\Traits\Anonymizable;
 
 class AnonymizeService
 {
@@ -12,19 +11,21 @@ class AnonymizeService
     {
         $faker = Factory::create(config('anonymizer.faker.locale'));
 
-        $provider = $config['faker']['provider'] ?? null;
+        $fakerConfig = $config['faker'];
+
+        $provider = $fakerConfig['provider'] ?? null;
         if (! $provider) {
             throw new InvalidArgumentException('The column name must specify how to anonymize the data');
         }
-        $params = $config['faker']['params'] ?? null;
+        $params = $fakerConfig['params'] ?? null;
 
         if ($model && $provider === 'database') {
-            $field = $config['faker']['params']['copyField'] ?? null;
+            $field = $fakerConfig['params']['copyField'] ?? null;
             if (!$field) {
                 throw new InvalidArgumentException('The field name must specify how to anonymize the data');
             }
 
-            $prefix = $config['faker']['params']['prefix'] ?? '';
+            $prefix = $fakerConfig['params']['prefix'] ?? '';
 
             $anonymizedValue = $prefix. $model[$field];
         } else {

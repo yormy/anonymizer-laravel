@@ -65,6 +65,20 @@ Password can be set, laravel will take care of the bcrypt hash storage
         ],
 ```
 
+## Nested JSON data
+encapsulate the settings within the ```jsonfaker``` 
+```
+        'receiver_info' => [
+            'jsonfaker' => [
+                'name' => [
+                    'faker' => ['provider' => 'name'],
+                ],
+                'contact' => [
+                    'faker' => ['provider' => 'safeEmail'],
+                ]
+            ],
+        ],
+```
 
 # Dry run
 you can run the anonymizer without performing actions to give you a clue about what is going to happen.
