@@ -14,6 +14,11 @@ Especially useful for when developers have to work with production data. In that
 composer require yormy/anonymizer-laravel
 ```
 
+# Publishing config
+```
+php artisan vendor:publish --provider="Yormy\AnonymizerLaravel\AnonymizerServiceProvider"
+```
+
 # Models
 Update the models you want to be able to anonymize
 

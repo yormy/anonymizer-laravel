@@ -82,17 +82,6 @@ return [
     |
     */
     'withoutModel' => [
-        'customers' => [
-            'primaryKey' => 'id',
-            'fields' => [
-                'email' => [
-                    'faker' => ['provider' => 'safeEmail'],
-                ],
-                'username' => [
-                    'faker' => ['provider' => 'safeEmail'],
-                ],
-            ]
-        ]
     ],
 
     /*
