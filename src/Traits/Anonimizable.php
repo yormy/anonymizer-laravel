@@ -24,8 +24,8 @@ trait Anonimizable
 
             $total += $models->count();
 
-            $durationIsSeconds = round(microtime(true) - $startTime, 1);
-            event(new ModelsAnonymized(static::class, $total, $durationIsSeconds));
+            $durationInSeconds = round(microtime(true) - $startTime, 1);
+            event(new ModelsAnonymized(static::class, $total, $durationInSeconds));
         });
 
         return $total;

@@ -77,6 +77,8 @@ Password can be set, laravel will take care of the bcrypt hash storage
 ```
 
 ### Common faker functions
+https://github.com/fzaninotto/Faker
+
 firstName
 lastName
 userName                // 'wade55'
@@ -122,6 +124,28 @@ image($dir, $width, $height, 'cats')  // 'tmp/13b73edae8443990be1aa8f1a483bc27.j
 image($dir, $width, $height, 'cats', false) // '13b73edae8443990be1aa8f1a483bc27.jpg' it's a filename without path
 image($dir, $width, $height, 'cats', true, false) // it's a no randomize images (default: `true`)
 image($dir, $width, $height, 'cats', true, true, 'Faker') // 'tmp/13b73edae8443990be1aa8f1a483bc27.jpg' it's a cat with 'Faker' text. Default, `null`.
+
+
+unixTime($max = 'now')                // 58781813
+dateTime($max = 'now', $timezone = null) // DateTime('2008-04-25 08:37:17', 'UTC')
+dateTimeAD($max = 'now', $timezone = null) // DateTime('1800-04-29 20:38:49', 'Europe/Paris')
+iso8601($max = 'now')                 // '1978-12-09T10:10:29+0000'
+date($format = 'Y-m-d', $max = 'now') // '1979-06-09'
+time($format = 'H:i:s', $max = 'now') // '20:49:42'
+dateTimeBetween($startDate = '-30 years', $endDate = 'now', $timezone = null) // DateTime('2003-03-15 02:00:49', 'Africa/Lagos')
+dateTimeInInterval($startDate = '-30 years', $interval = '+ 5 days', $timezone = null) // DateTime('2003-03-15 02:00:49', 'Antartica/Vostok')
+dateTimeThisCentury($max = 'now', $timezone = null)     // DateTime('1915-05-30 19:28:21', 'UTC')
+dateTimeThisDecade($max = 'now', $timezone = null)      // DateTime('2007-05-29 22:30:48', 'Europe/Paris')
+dateTimeThisYear($max = 'now', $timezone = null)        // DateTime('2011-02-27 20:52:14', 'Africa/Lagos')
+dateTimeThisMonth($max = 'now', $timezone = null)       // DateTime('2011-10-23 13:46:23', 'Antarctica/Vostok')
+amPm($max = 'now')                    // 'pm'
+dayOfMonth($max = 'now')              // '04'
+dayOfWeek($max = 'now')               // 'Friday'
+month($max = 'now')                   // '06'
+monthName($max = 'now')               // 'January'
+year($max = 'now')                    // '1993'
+century                               // 'VI'
+timezone                              // 'Europe/Paris'
 
 
 # Optional: specify which records need to be anonymized

@@ -7,7 +7,7 @@ class ModelsAnonymized
     public function __construct(
         public readonly string $model,
         public readonly int $count,
-        public readonly float $durationIsSeconds
+        public readonly float $durationInSeconds
     ) {
 
     }

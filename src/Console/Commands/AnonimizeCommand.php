@@ -25,7 +25,7 @@ class AnonimizeCommand extends Command
 
     protected $description = 'Anonymize models';
 
-    private readonly float $startTime;
+    private float $startTime;
 
     /**
      * The console components factory.
@@ -46,6 +46,8 @@ class AnonimizeCommand extends Command
      */
     public function handle(Dispatcher $events)
     {
+        $this->startTime = microtime(true);
+
         if (! in_array(config('app.env'), $this->configEnvironments())) {
             $this->error('It is forbidden to run anonymizer on '. (string)config('app.env').' environment');
 
@@ -78,13 +80,9 @@ class AnonimizeCommand extends Command
              */
             if (! in_array($event->model, $anonymizing)) {
                 $anonymizing[] = $event->model;
-
-                $this->newLine();
-
-                $this->components->info(sprintf('Anonymizing [%s] records.', $event->model));
             }
 
-            $this->components->twoColumnDetail($event->model, "{$event->count} records ({$event->durationIsSeconds} seconds)");
+            $this->components->twoColumnDetail($event->model, "{$event->count} records ({$event->durationInSeconds} seconds)");
         });
 
         /**
@@ -95,6 +93,9 @@ class AnonimizeCommand extends Command
         $this->truncateTables();
 
         $events->forget(ModelsAnonymized::class);
+
+        $durationInMinutes = round((microtime(true) - $this->startTime)/60, 1);
+        $this->components->twoColumnDetail('TOTAL DURATION', "{$durationInMinutes} minutes");
 
         return null;
     }
@@ -130,7 +131,7 @@ class AnonimizeCommand extends Command
             : 0;
 
         if ($total === 0) {
-            $this->components->info("No anonymizable [$model] records found.");
+            $this->components->twoColumnDetail($model, '0 records');
         }
     }
 
