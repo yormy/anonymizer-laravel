@@ -114,7 +114,11 @@ class AnonimizeCommand extends Command
 
     protected function anonymizeModel(string $model): void
     {
-        $instance = $this->getClass($model);
+        try {
+            $instance = $this->getClass($model);
+        } catch (\Throwable) {
+            return; // if the class cannot be created (ie abstract class) just skip it
+        }
 
         $chunkSize = $this->option('chunk');
 
