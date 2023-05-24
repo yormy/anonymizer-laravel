@@ -48,9 +48,6 @@ class AnonymizeCommand extends Command
      */
     public function handle(Dispatcher $events)
     {
-        AnonymizeWithoutModel::exec();
-        return;
-
         $this->startTime = microtime(true);
 
         if (! in_array(config('app.env'), $this->configEnvironments())) {
@@ -96,6 +93,8 @@ class AnonymizeCommand extends Command
         $models->each(fn ($model) => $this->anonymizeModel($model));
 
         $this->truncateTables();
+
+        AnonymizeWithoutModel::exec();
 
         $events->forget(ModelsAnonymized::class);
 
