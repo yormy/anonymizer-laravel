@@ -9,8 +9,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\Finder\Finder;
+use Yormy\AnonymizerLaravel\Actions\AnonymizeWithoutModel;
 use Yormy\AnonymizerLaravel\Events\ModelsAnonymized;
 use Yormy\AnonymizerLaravel\Traits\Anonymizable;
+
 
 /**
  * @psalm-suppress UndefinedThisPropertyFetch
@@ -46,6 +48,9 @@ class AnonymizeCommand extends Command
      */
     public function handle(Dispatcher $events)
     {
+        AnonymizeWithoutModel::exec();
+        return;
+
         $this->startTime = microtime(true);
 
         if (! in_array(config('app.env'), $this->configEnvironments())) {

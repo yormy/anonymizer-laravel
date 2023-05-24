@@ -56,6 +56,17 @@ return [
         'audits',
     ],
 
+    'withoutModel' => [
+        'customers' => [
+            'primaryKey' => 'id',
+            'fields' => [
+                'email' => [
+                    'faker' => ['provider' => 'safeEmail'],
+                ],
+            ]
+        ]
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Ignore paths
