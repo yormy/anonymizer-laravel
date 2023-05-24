@@ -103,6 +103,7 @@ e164PhoneNumber     // '+27113456789'
 
 city                                // 'West Judge'
 streetName                          // 'Keegan Trail'
+buildingNumber                      // '484'
 streetAddress                       // '439 Karley Loaf Suite 897'
 postcode                            // '17916'
 address                             // '8888 Cummings Vista Apt. 101, Susanbury, NY 95473'
