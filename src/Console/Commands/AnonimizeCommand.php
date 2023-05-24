@@ -18,13 +18,20 @@ use Yormy\AnonymizerLaravel\Traits\Anonimizable;
  */
 class AnonimizeCommand extends Command
 {
-    protected $signature = 'db:anonymizer
+    protected $signature = 'db:anonymize
                                 {--model=* : Class names of the models to be anonymized}
                                 {--chunk=1000 : The number of models to retrieve per chunk of models to be deleted}
                                 {--pretend : Display the number of anonymized records found instead of actioning on them}';
 
     protected $description = 'Anonymize models';
 
+    private readonly float $startTime;
+
+    public function __construct()
+    {
+        $this->startTime = microtime(true);
+        parent::__construct();
+    }
 
     /**
      * The console components factory.
@@ -45,6 +52,8 @@ class AnonimizeCommand extends Command
      */
     public function handle(Dispatcher $events)
     {
+
+
         if (! in_array(config('app.env'), $this->configEnvironments())) {
             $this->error('It is forbidden to run anonymizer on '. (string)config('app.env').' environment');
 
@@ -235,5 +244,15 @@ class AnonimizeCommand extends Command
          * @var Model
          */
         return new $name();
+    }
+
+    public function __destruct()
+    {
+        if (!$this->option('pretend')) {
+            $durationgIsSeconds = round(microtime(true) - $this->startTime, 1);
+            $this->components->twoColumnDetail("Duration of anonymization", "{$durationgIsSeconds} seconds");
+        }
+
+        parent::__destruct();
     }
 }
