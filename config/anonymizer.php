@@ -58,6 +58,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Scan path
+    |--------------------------------------------------------------------------
+    |
+    | The following path will be scanned for anonymizable models
+    | All models somewhere in that path that use the Anonymizable trait will be processed
+    |
+    */
+    'scan_path' => 'Console/Commands',
+
+    /*
+    |--------------------------------------------------------------------------
     | Without Model
     |--------------------------------------------------------------------------
     |

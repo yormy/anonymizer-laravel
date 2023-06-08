@@ -184,7 +184,7 @@ class AnonymizeCommand extends Command
 
     protected function getDefaultPath(): string
     {
-        return app_path('');
+        return app_path(config('anonymizer.scan_path', ''));
     }
 
     protected function isAnonymizable(string $model): bool
