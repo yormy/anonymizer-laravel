@@ -164,11 +164,13 @@ timezone                              // 'Europe/Paris'
 
 
 # Optional: specify which records need to be anonymized
-if you do not specify which records needs to be anonymized all records will be anonymized
+if you do not specify which records needs to be anonymized all records will be anonymized when you run the command.
+So in the following case when you run anonymizer all records with an id > 10 will be anonymized, records with id 10 or lower will be untouched
+The use case is sometimes you want to exclude certain records from being anonymized
 ```
     public function anonymizable(): Builder
     {
-        return static::where('created_at', '>', now()->subMonth());
+        return static::where('id', '>', 10);
     }
 ```
 
