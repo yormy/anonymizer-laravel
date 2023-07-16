@@ -19,6 +19,7 @@ composer require yormy/anonymizer-laravel
 php artisan vendor:publish --provider="Yormy\AnonymizerLaravel\AnonymizerServiceProvider"
 ```
 
+
 # Models
 Update the models you want to be able to anonymize
 
