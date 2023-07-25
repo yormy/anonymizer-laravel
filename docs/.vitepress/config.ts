@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: "Anonymizer",
-  description: "Easy anonymiz your datta",
+  description: "Easy anonymize your data",
   base: '/anonymizer-laravel/',
   head: [
     ['link', { rel: "apple-touch-icon", sizes: "180x180", href: "/assets/images/apple-touch-icon.png"}],
