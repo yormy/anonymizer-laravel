@@ -51,7 +51,7 @@ class AnonymizeCommand extends Command
         $allowedEnvironments = $this->configEnvironments();
         if (! in_array(config('app.env'), $allowedEnvironments)) {
             $this->error('It is forbidden to run anonymizer on '.(string) config('app.env').' environment');
-            $this->error('As specified in your config, only allowed to run on'. implode(',', $allowedEnvironments));
+            $this->error('As specified in your config, only allowed to run on the following: '. implode(', ', $allowedEnvironments));
 
             return 0;
         }
