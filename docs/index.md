@@ -11,7 +11,7 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /v1/introduction/what-is-anoymizer
+      link: /v1/introduction/what-is-anonymizer
     - theme: alt
       text: View on GitHub
       link: https://github.com/yormy/anonymizer-laravel/
