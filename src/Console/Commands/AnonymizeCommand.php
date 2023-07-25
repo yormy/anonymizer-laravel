@@ -48,8 +48,10 @@ class AnonymizeCommand extends Command
     {
         $this->startTime = microtime(true);
 
-        if (! in_array(config('app.env'), $this->configEnvironments())) {
+        $allowedEnvironments = $this->configEnvironments();
+        if (! in_array(config('app.env'), $allowedEnvironments)) {
             $this->error('It is forbidden to run anonymizer on '.(string) config('app.env').' environment');
+            $this->error('As specified in your config, only allowed to run on', implode(',', $allowedEnvironments));
 
             return 0;
         }
