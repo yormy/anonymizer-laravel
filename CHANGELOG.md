@@ -10,7 +10,6 @@ All notable changes to `anonymizer` will be documented in this file
  
 ## [0.0.1] - 2020-11-24
 
-
 ## 0.0.0 - 202X-XX-XX
 
 - initial release
