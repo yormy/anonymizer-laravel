@@ -174,8 +174,10 @@ class AnonymizeCommand extends Command
          * @var string[] $ignorePaths
          */
         $ignorePaths = config('anonymizer.ignore');
+        $lowercaseIgnore = array_map(fn($item) => Str::lower($item), $ignorePaths);
+        $lowercaseIgnore = array_map(fn($item) => Str::replace('/', "\\", $item), $lowercaseIgnore);
 
-        if (Str::startsWith($model, $ignorePaths)) {
+        if (Str::startsWith(Str::lower($model), $lowercaseIgnore)) {
             return false;
         }
 
